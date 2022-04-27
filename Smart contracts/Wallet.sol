@@ -1,32 +1,15 @@
 //SPDX-License-Identifier: GPL-3.0-or-later>
 pragma solidity ^0.8.7;
 
-contract Wallet{
+import "./Ownable.sol";
+
+contract Wallet is Ownable{
     
     event moneyReceived(address _sender, uint _amount);
     event moneyWithdrawed(address _to, uint _amount);
 
-    modifier ownerOnly {
-        require(isOwner(), "You are not allowed");
-        _;
-    }
-    
-    modifier notOwner {
-        require(!isOwner(), "You are not allowed");
-        _;
-    }
-
-    function isOwner() internal view returns(bool) {
-        return msg.sender == owner;
-    }
-
-    address owner;
     uint public balance;
     
-    constructor(){
-        owner = msg.sender;
-    }
-
     function receiveMoney() public payable {
         balance += msg.value;
         emit moneyReceived(msg.sender, msg.value);
